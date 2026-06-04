@@ -1,0 +1,8 @@
+{
+  "name": "JSAR 2026 iPhone演題メモ",
+  "short_name": "JSAR 2026",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7fafc",
+  "theme_color": "#123b5d"
+}
