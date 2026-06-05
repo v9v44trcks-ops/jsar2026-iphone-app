@@ -1,4 +1,4 @@
-const CACHE_NAME = "jsar-2026-iphone-v1";
+const CACHE_NAME = "jsar-2026-iphone-v2";
 const ASSETS = [
   "./",
   "./index.html",
