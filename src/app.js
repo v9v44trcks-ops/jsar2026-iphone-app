@@ -28,7 +28,11 @@
     template: document.querySelector("#presentation-template"),
     exportMd: document.querySelector("#export-md"),
     exportJson: document.querySelector("#export-json"),
-    importJson: document.querySelector("#import-json")
+    importJson: document.querySelector("#import-json"),
+    copyJson: document.querySelector("#copy-json"),
+    importPaste: document.querySelector("#import-paste"),
+    importPasteButton: document.querySelector("#import-paste-button"),
+    transferStatus: document.querySelector("#transfer-status")
   };
 
   function loadNotes() {
@@ -236,6 +240,43 @@
     downloadText("jsar2026-iphone-backup.json", JSON.stringify(state.notes, null, 2));
   }
 
+  function setTransferStatus(message) {
+    if (elements.transferStatus) elements.transferStatus.textContent = message;
+  }
+
+  function restoreNotesFromText(text) {
+    try {
+      const imported = JSON.parse(text);
+      if (!imported || typeof imported !== "object" || Array.isArray(imported)) {
+        throw new Error("Invalid backup");
+      }
+      state.notes = imported;
+      saveNotes();
+      render();
+      setTransferStatus("復元しました。");
+      return true;
+    } catch {
+      setTransferStatus("復元できませんでした。バックアップ内容を確認してください。");
+      alert("バックアップJSONを読み込めませんでした。");
+      return false;
+    }
+  }
+
+  async function copyJsonBackup() {
+    const text = JSON.stringify(state.notes, null, 2);
+    try {
+      await navigator.clipboard.writeText(text);
+      setTransferStatus("バックアップ内容をコピーしました。");
+    } catch {
+      if (elements.importPaste) {
+        elements.importPaste.value = text;
+        elements.importPaste.focus();
+        elements.importPaste.select();
+      }
+      setTransferStatus("下の欄にバックアップ内容を表示しました。長押しでコピーできます。");
+    }
+  }
+
   function downloadText(filename, text) {
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -293,14 +334,15 @@
 
   elements.exportMd.addEventListener("click", exportMarkdown);
   elements.exportJson.addEventListener("click", exportJson);
+  elements.copyJson?.addEventListener("click", copyJsonBackup);
+  elements.importPasteButton?.addEventListener("click", () => {
+    restoreNotesFromText(elements.importPaste?.value || "");
+  });
   elements.importJson.addEventListener("change", async (event) => {
     const file = event.target.files[0];
     if (!file) return;
     try {
-      const imported = JSON.parse(await file.text());
-      state.notes = imported && typeof imported === "object" ? imported : {};
-      saveNotes();
-      render();
+      restoreNotesFromText(await file.text());
     } catch {
       alert("バックアップJSONを読み込めませんでした。");
     } finally {
