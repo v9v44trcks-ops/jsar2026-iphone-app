@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-title" content="JSAR 2026">
     <title>JSAR 2026 iPhone</title>
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="stylesheet" href="src/styles.css?v=2">
+    <link rel="stylesheet" href="src/styles.css?v=4">
   </head>
   <body>
     <header class="app-header">
@@ -52,6 +52,19 @@
           <input id="import-json" type="file">
         </label>
       </section>
+
+      <details class="restore-paste">
+        <summary>復元ファイルが出ない時</summary>
+        <div class="restore-tools">
+          <button id="copy-json" type="button">バックアップをコピー</button>
+          <label>
+            バックアップ内容を貼り付け
+            <textarea id="import-paste" rows="5" placeholder="jsar2026-iphone-backup.json の中身をここに貼り付け"></textarea>
+          </label>
+          <button id="import-paste-button" type="button">貼り付けから復元</button>
+          <p id="transfer-status" role="status"></p>
+        </div>
+      </details>
 
       <section id="presentation-list" class="presentation-list" aria-live="polite"></section>
     </main>
@@ -108,8 +121,8 @@
       </article>
     </template>
 
-    <script src="src/data.js?v=3"></script>
-    <script src="src/lectures.js?v=3"></script>
-    <script src="src/app.js?v=3"></script>
+    <script src="src/data.js?v=4"></script>
+    <script src="src/lectures.js?v=4"></script>
+    <script src="src/app.js?v=4"></script>
   </body>
 </html>
